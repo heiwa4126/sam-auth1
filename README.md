@@ -30,6 +30,9 @@ curl https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/goodbye/
 curl -u admin:password https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/basic/
 ```
 
+BASIC認証はいまのところ WWW-Authenticate: ヘッダが返せないのでブラウザで使えない。
+Custom Error Pagesで401のときに返すヘッダを追加してやればできるらしい。
+
 
 # 削除
 
@@ -52,6 +55,13 @@ Header: に対するドキュメントが無い
 同様に
 Token Validationに指定できるのは正規表現らしいけど、
 ドキュメントが見つからない。
+
+## BASIC認証のカスタムエラーページ
+
+
+* [カスタマイズされたレスポンスの例 - AWS Serverless Application Model](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/serverless-controlling-access-to-apis-customize-response.html)
+* [Using Basic Authentication with AWS API Gateway and Lambda - Cloudmailin](https://www.cloudmailin.com/blog/basic_auth_with_aws_lambda)
+
 
 
 # sam-auth1
