@@ -1,15 +1,64 @@
 # sam-auth1
 
+Lambda TOKEN オーソライザーのサンプル。
+
+テストのためにToken Sourceをデフォルトの"Authorization"から変えてある。
+
+
+# デプロイ
+
+SAMなので
+```sh
+sam build
+sam deploy --guided  # --guidedは最初の1回
+```
+
+OutputのHelloWorldApiのURLに対してcurlで
+Auth:ヘッダに `allow`で認証される。
+
+```sh
+curl -H "Auth: allow" https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/hello/
+```
+
+
+# 削除
+
+```sh
+sam delete
+```
+
+
+# 参考
+
+* [LambdaTokenAuthorizer - AWS Serverless Application Model](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/sam-property-api-lambdatokenauthorizer.html)
+* [LambdaTokenAuthorizationIdentity - AWS Serverless Application Model](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/sam-property-api-lambdatokenauthorizationidentity.html)
+* [API Gateway Lambda オーソライザーを使用する - Amazon API Gateway](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
+
+
+LambdaTokenAuthorizationIdentityの
+Header: に対するドキュメントが無い
+(けど動くし、設定できてコンソールからも見える)。
+
+同様に
+Token Validationに指定できるのは正規表現らしいけど、
+ドキュメントが見つからない。
+
+
+# sam-auth1
+
+以下 `sam init` そのまま。
+
+
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
 - hello-world - Code for the application's Lambda function.
 - events - Invocation events that you can use to invoke the function.
-- hello-world/tests - Unit tests for the application code. 
+- hello-world/tests - Unit tests for the application code.
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
-If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
+If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.
 The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds a simplified step-through debugging experience for Lambda function code. See the following links to get started.
 
 * [CLion](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
