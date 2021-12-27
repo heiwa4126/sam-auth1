@@ -28,7 +28,7 @@ Resources:
               # Unauthorizedにする。
               # 普通はベアラーヘッダ向けに `Bearer.*`
 
-  HelloWorldFunction:
+  HelloFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/
@@ -37,20 +37,28 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        Hello:
           Type: Api
           Properties:
-
             RestApiId: !Ref MyApi
             Path: /hello
             Method: get
+        Goodbye:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /goodbye
+            Method: get
+            Auth:
+              Authorizer: NONE
+              # テスト: override
 
-  HelloWorldFunctionLogGroup:
+  HelloFunctionLogGroup:
     Type: AWS::Logs::LogGroup
-    DependsOn: HelloWorldFunction
+    DependsOn: HelloFunction
     Properties:
       RetentionInDays: 7
-      LogGroupName: !Sub "/aws/lambda/${HelloWorldFunction}"
+      LogGroupName: !Sub "/aws/lambda/${HelloFunction}"
 
   MyAuthFunction:
     Type: AWS::Serverless::Function
@@ -66,6 +74,6 @@ Resources:
       LogGroupName: !Sub "/aws/lambda/${MyAuthFunction}"
 
 Outputs:
-  HelloWorldApi:
+  HelloApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/${MyApi.Stage}/hello/"
