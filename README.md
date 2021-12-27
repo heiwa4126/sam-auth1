@@ -20,6 +20,16 @@ Auth:ヘッダに `allow`で認証される。
 curl -H "Auth: allow" https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/hello/
 ```
 
+/goodbye/は認証不要
+```sh
+curl https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/goodbye/
+```
+
+/basic/はBASIC認証
+```sh
+curl -u admin:password https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/basic/
+```
+
 
 # 削除
 

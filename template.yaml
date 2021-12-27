@@ -17,7 +17,8 @@ Resources:
     Properties:
       StageName: Prod
       Auth:
-        DefaultAuthorizer: MyLambdaTokenAuth
+        # DefaultAuthorizer: MyLambdaTokenAuth
+        DefaultAuthorizer: BasicAuth
         Authorizers:
           MyLambdaTokenAuth:
             FunctionArn: !GetAtt MyAuthFunction.Arn
@@ -27,6 +28,11 @@ Resources:
               # テスト: Authヘッダの内容がa...wでない場合すぐ弾いて(lambdaの資源節約)
               # Unauthorizedにする。
               # 普通はベアラーヘッダ向けに `Bearer.*`
+          BasicAuth:
+            FunctionArn: !GetAtt BasicAuthFunction.Arn
+            Identity:
+              Header: Authorization
+              ValidationExpression: ^Basic.*
 
   HelloFunction:
     Type: AWS::Serverless::Function
@@ -43,6 +49,8 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: get
+            Auth:
+              Authorizer: MyLambdaTokenAuth
         Goodbye:
           Type: Api
           Properties:
@@ -52,6 +60,14 @@ Resources:
             Auth:
               Authorizer: NONE
               # テスト: override
+        Basic:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /basic
+            Method: get
+            # Auth:
+            #   Authorizers: BasicAuth
 
   HelloFunctionLogGroup:
     Type: AWS::Logs::LogGroup
@@ -72,6 +88,19 @@ Resources:
     Properties:
       RetentionInDays: 7
       LogGroupName: !Sub "/aws/lambda/${MyAuthFunction}"
+
+  BasicAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/
+      Handler: basicauth.handler
+      Runtime: nodejs14.x
+  BasicAuthFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: BasicAuthFunction
+    Properties:
+      RetentionInDays: 7
+      LogGroupName: !Sub "/aws/lambda/${BasicAuthFunction}"
 
 Outputs:
   HelloApi:
