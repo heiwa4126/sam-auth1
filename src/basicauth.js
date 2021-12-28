@@ -9,13 +9,15 @@ exports.handler = function (event, context, callback) {
 
   console.log(authorizationHeader);
 
+  // admin:password でいいなら
+  // authorizationHeader == 'Basic YWRtaW46cGFzc3dvcmQ='
+  // で十分。
+
   let encodedCreds = authorizationHeader.split(" ")[1]
   let plainCreds = (Buffer.from(encodedCreds, 'base64')).toString().split(':')
   let username = plainCreds[0]
   let password = plainCreds[1]
-
   console.log(`username=${username}, password=${password}`);
-
   if (!(username === 'admin' && password === 'password')) return callback('Unauthorized')
 
   let authResponse = buildAllowAllPolicy(event, username)

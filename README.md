@@ -58,10 +58,11 @@ Token Validationに指定できるのは正規表現らしいけど、
 
 ## BASIC認証のカスタムエラーページ
 
-
 * [カスタマイズされたレスポンスの例 - AWS Serverless Application Model](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/serverless-controlling-access-to-apis-customize-response.html)
 * [Using Basic Authentication with AWS API Gateway and Lambda - Cloudmailin](https://www.cloudmailin.com/blog/basic_auth_with_aws_lambda)
 
+Token Validationを有効にすると、
+Custom Gateway Responsesが効かなくなる...
 
 
 # sam-auth1
