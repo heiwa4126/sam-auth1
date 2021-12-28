@@ -20,7 +20,7 @@ Resources:
         Unauthorized:
           ResponseParameters:
             Headers:
-              "WWW-Authenticate": "'Basic'"
+              "WWW-Authenticate": "'Basic realm=LAMBDA_TEST'"
           ResponseTemplates:
             "application/json": {"message":$context.error.messageString}
       Auth:
@@ -40,7 +40,7 @@ Resources:
             Identity:
               Header: Authorization
               # ValidationExpression: ^Basic.*
-              # 設定するとGatewayResponseが効かなくなってしまう... ブラウザで動かないのは困る。
+              # ↑設定するとGatewayResponseが効かなくなってしまう... ブラウザで動かないのは困る。
               # だが設定しないと毎回BasicAuthFunctionが呼ばれてしまう...
 
   HelloFunction:
@@ -113,5 +113,5 @@ Resources:
 
 Outputs:
   HelloApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Description: "API Gateway endpoint URL for Prod stage for Hello function"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/${MyApi.Stage}/hello/"

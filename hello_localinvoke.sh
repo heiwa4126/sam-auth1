@@ -1,4 +1,4 @@
 #!/bin/sh -ue
 
-sam local invoke HelloWorldFunction \
+sam local invoke HelloFunction \
 	  -e events/hello.json

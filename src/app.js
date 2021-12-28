@@ -2,7 +2,10 @@ exports.handler = async (event, context) => {
 
   const response = {
     statusCode: 200,
-    body: JSON.stringify('Hello from Lambda!'),
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: "Hello from Lambda!"
   };
   return response;
 };
