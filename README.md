@@ -13,6 +13,7 @@ Lambda オーソライザーのサンプル。
 - [参考](#参考)
   - [BASIC認証のカスタムエラーページ](#basic認証のカスタムエラーページ)
 - [その他](#その他)
+  - [そのほか参考](#そのほか参考)
 
 
 # デプロイ
@@ -132,3 +133,7 @@ api-gateway-lambda-authorizer-output.html)
 後段のlambdaで
 event.requestContext.authorizer
 から取れる。
+
+## そのほか参考
+
+* [dougalb/lambda-authorizer-basic-auth: A Serverless Application that creates Lambda function to use as an authorizer in Amazon API Gateway for HTTP Basic Auth and a DynamoDB tables for users.](https://github.com/dougalb/lambda-authorizer-basic-auth)
