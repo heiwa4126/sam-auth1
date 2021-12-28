@@ -1,4 +1,6 @@
 'use strict';
+const policy = require('./policy.js');
+
 exports.handler = function (event, context, callback) {
 
   let authorizationHeader = event.authorizationToken;
@@ -19,21 +21,5 @@ exports.handler = function (event, context, callback) {
     return callback('Unauthorized');
   }
 
-  callback(null, buildAllowAllPolicy(username, event));
-}
-
-function buildAllowAllPolicy(principalId, event) {
-  return {
-    principalId,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: event.methodArn
-        }
-      ]
-    }
-  }
+  callback(null, policy.generate(username, 'Allow', event));
 }
