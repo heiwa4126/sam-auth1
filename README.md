@@ -92,3 +92,22 @@ Token Validationに指定できるのは正規表現らしいけど、
 
 Token Validationを有効にすると、
 Custom Gateway Responsesが効かなくなる...
+
+# その他
+
+authのlambdaは非同期ハンドラ(non-async handler)で書かないといけないものなの?
+
+non-async handlerのcallbackは
+```javascript
+callback(response_error, response_success)
+```
+らしいのだけど、ドキュメントが見つからない。
+
+auth関数でprincipalIdには何を設定するべき?
+
+> principalId 値には、マッピングテンプレートで $context.authorizer.principalId 変数を使ってアクセスできます。これはバックエンドに値を渡す場合に便利です。
+
+引用元: [Amazon API Gateway Lambda オーソライザーからの出力 - Amazon API Gateway](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/
+api-gateway-lambda-authorizer-output.html)
+
+後段のlambdaで使えるよう渡すだけ。

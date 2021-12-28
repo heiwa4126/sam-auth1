@@ -1,48 +1,37 @@
-exports.handler = function(event, context, callback) {
-  // https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html
-  console.log(event);
+'use strict';
+// https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html
+
+exports.handler = function (event, context, callback) {
   let token = event.authorizationToken;
-  console.log(token);
+
   // 値が allow だったらAPI実行するためのIAMポリシーを生成して返す
-  if (token === undefined ) {
+  if (!token) {
     callback("Unauthorized");   // Return a 401 Unauthorized response
   } else {
-    switch (token) {
-    case 'allow':
-      callback(null, generatePolicy('user', 'Allow', event.methodArn));
-      break;
-    case 'unauthorized':
-      callback("Unauthorized");   // Return a 401 Unauthorized response
-      break;
-    default:
-      callback(null, generatePolicy('user', 'Deny', event.methodArn));
-    }
+    callback(null, generatePolicy('user', (token === 'allow') ? 'Allow' : 'Deny', event));
   }
 };
 
-// IAMポリシーを生成し返却します
-const generatePolicy = function(principalId, effect, resource) {
-
-  let authResponse = {};
-
-  authResponse.principalId = principalId;
-  if (effect && resource) {
-    let policyDocument = {};
-    policyDocument.Version = '2012-10-17';
-    policyDocument.Statement = [];
-    let statementOne = {};
-    statementOne.Action = 'execute-api:Invoke';
-    statementOne.Effect = effect;
-    statementOne.Resource = resource;
-    policyDocument.Statement[0] = statementOne;
-    authResponse.policyDocument = policyDocument;
+function generatePolicy(principalId, effect, event) {
+  const policy = {
+    principalId,
+    policyDocument: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: effect,
+          Resource: event.methodArn
+        }
+      ]
+    }
   }
-
-  // // Optional output with custom properties of the String, Number or Boolean type.
-  // authResponse.context = {
+  // Optional output with custom properties of the String, Number or Boolean type.
+  // policy.context = {
   //     "stringKey": "stringval",
   //     "numberKey": 123,
   //     "booleanKey": true
   // };
-  return authResponse;
+
+  return policy;
 }
