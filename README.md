@@ -109,6 +109,8 @@ Custom Gateway Responsesが効かなくなる...
 
 # その他
 
+Lambdaオーソライザーは昔は「カスタムオーソライザー」と呼ばれていたらしい。
+
 authのlambdaは非同期ハンドラ(non-async handler)で書かないといけないものなの?
 
 non-async handlerのcallbackは
@@ -125,3 +127,8 @@ auth関数でprincipalIdには何を設定するべき?
 api-gateway-lambda-authorizer-output.html)
 
 後段のlambdaで使えるよう渡すだけ。
+
+同様に、policyのcontextで設定した値は
+後段のlambdaで
+event.requestContext.authorizer
+から取れる。
