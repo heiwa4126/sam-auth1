@@ -1,0 +1,6 @@
+{
+  "queryStringParameters": {
+    "auth": "allow"
+  },
+  "methodArn": "<methodArn>"
+}

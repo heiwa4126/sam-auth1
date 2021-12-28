@@ -42,7 +42,12 @@ Resources:
               # ValidationExpression: ^Basic.*
               # ↑設定するとGatewayResponseが効かなくなってしまう... ブラウザで動かないのは困る。
               # だが設定しないと毎回BasicAuthFunctionが呼ばれてしまう...
-
+          MyLambdaRequestAuth:
+            FunctionPayloadType: REQUEST
+            FunctionArn: !GetAtt MyRequestAuthFunction.Arn
+            Identity:
+              QueryStrings:
+                - auth
   HelloFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -77,6 +82,14 @@ Resources:
             Method: get
             # Auth:
             #   Authorizers: BasicAuth
+        Hi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /hi
+            Method: get
+            Auth:
+              Authorizer: MyLambdaRequestAuth
 
   HelloFunctionLogGroup:
     Type: AWS::Logs::LogGroup
@@ -97,6 +110,19 @@ Resources:
     Properties:
       RetentionInDays: 7
       LogGroupName: !Sub "/aws/lambda/${MyAuthFunction}"
+
+  MyRequestAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/
+      Handler: reqauth.handler
+      Runtime: nodejs14.x
+  MyAuthFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: MyRequestAuthFunction
+    Properties:
+      RetentionInDays: 7
+      LogGroupName: !Sub "/aws/lambda/${MyRequestAuthFunction}"
 
   BasicAuthFunction:
     Type: AWS::Serverless::Function

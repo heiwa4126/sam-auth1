@@ -1,16 +1,19 @@
 # sam-auth1
 
-Lambda TOKEN オーソライザーのサンプル。
+Lambda オーソライザーのサンプル。
 
 - [sam-auth1](#sam-auth1)
 - [デプロイ](#デプロイ)
 - [テスト](#テスト)
-  - [HTTPヘッダの中身で認証](#httpヘッダの中身で認証)
+  - [HTTPヘッダの中身で認証(Tokenオーソライザー)](#httpヘッダの中身で認証tokenオーソライザー)
   - [デフォルトオーソライザーの無効化](#デフォルトオーソライザーの無効化)
-  - [BASIC認証](#basic認証)
+  - [TokenオーソライザーでBASIC認証](#tokenオーソライザーでbasic認証)
+  - [REQUESTオーソライザー](#requestオーソライザー)
 - [削除](#削除)
 - [参考](#参考)
   - [BASIC認証のカスタムエラーページ](#basic認証のカスタムエラーページ)
+- [その他](#その他)
+
 
 # デプロイ
 
@@ -24,7 +27,7 @@ sam deploy --guided  # --guidedは最初の1回
 
 OutputのHelloApiのURLに対してcurlでアクセスする。
 
-## HTTPヘッダの中身で認証
+## HTTPヘッダの中身で認証(Tokenオーソライザー)
 
 /hello/は Auth:ヘッダに `allow` で認証される。
 
@@ -45,7 +48,7 @@ curl https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/goodbye/
 で
 デフォルトオーソライザーを無効化するテスト。
 
-## BASIC認証
+## TokenオーソライザーでBASIC認証
 
 /basic/はBASIC認証
 
@@ -61,6 +64,17 @@ Gateway Responsesをカスタマイズして、
 ただし副作用として/hello/まで
 `WWW-Authenticate: Basic`
 が帰ってるので、ごめんなさい。
+
+
+## REQUESTオーソライザー
+
+クエリauthにallowを渡す
+
+```sh
+curl https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/hi?auth=allow
+# or
+curl -G --data-urlencode "auth=allow" https://xxxxxxxxxx.execute-api.ap-northeast-1.amazonaws.com/Prod/hi
+```
 
 
 # 削除
